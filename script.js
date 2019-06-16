@@ -104,13 +104,8 @@ class PrintTableInConsole {
 
         this.titles.forEach(item => {
             
-            let spaces = (this.tableColumnWidths[`${item}`] - item.length) > 0 ?
-                this.tableColumnWidths[`${item}`] - item.length : 0;
-            titleStr += `${item}`;
-            while (spaces >= 0) {
-                titleStr += ' ';
-                --spaces;
-            }
+            titleStr += `${item}${this.addSpaces(this.tableColumnWidths[`${item}`], item.length)}`;
+
         });
 
         titleStr += '\n';
@@ -150,13 +145,8 @@ class PrintTableInConsole {
             const widthOfCurrentColumn = this.tableColumnWidths[`${key}`];
 
             if (value.length <= widthOfCurrentColumn) {
-                let spaces = (widthOfCurrentColumn - value.length) > 0 ?
-                    widthOfCurrentColumn - value.length : 0;
+                value += this.addSpaces(widthOfCurrentColumn, value.length);
 
-                while (spaces >= 0) {
-                    value += ' ';
-                    --spaces;
-                }
                 utilityObj[`${key}`] = [value];
 
             } else {
@@ -167,15 +157,8 @@ class PrintTableInConsole {
 
                 utilityObj[`${key}`].forEach(item => {
 
-                    let spaces = (widthOfCurrentColumn - item.length) > 0 ?
-                        widthOfCurrentColumn - item.length : 0;
+                    let wordNSpaces = item + this.addSpaces(widthOfCurrentColumn, item.length);
 
-                    let wordNSpaces = item;
-
-                    while (spaces > 0) {
-                        wordNSpaces += ' ';
-                        --spaces;
-                    }
                     cellWithSpaces.push(wordNSpaces)
                 });
                 utilityObj[`${key}`] = cellWithSpaces;
@@ -191,7 +174,7 @@ class PrintTableInConsole {
             for (let key in utilityObj) {
                 if (!utilityObj[`${key}`][i]) continue;
 
-                resultStr += `${utilityObj[`${key}`][i]} `;
+                resultStr += `${utilityObj[`${key}`][i]}`;
             }
             resultStr += '\n';
         }
@@ -208,6 +191,16 @@ class PrintTableInConsole {
         });
 
         return console.log(table);
+    }
+
+    addSpaces(length1, length2) {
+        let spaces = '';
+
+        for (let spacesQuantity = (length1 - length2) > 0 ? length1 - length2 : 0; 
+        spacesQuantity >= 0; spacesQuantity--) {
+            spaces += ' ';
+        }
+        return spaces;
     }
 }
 
